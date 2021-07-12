@@ -29,7 +29,7 @@ fun Application.configureRouting() {
 }
 
 @Location("/location/{name}")
-class MyLocation(val name: String, val arg1: Int = 42, val arg2: String = "default")
+class MyLocation(val name: String, val arg1: Int = 500, val arg2: String = "default")
 
 @Location("/type/{name}")
 data class Type(val name: String) {

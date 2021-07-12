@@ -1,14 +1,17 @@
 package io.github.dlopezgarsco
 
-import io.ktor.server.engine.*
+import io.github.dlopezgarsco.plugins.configureHTTP
+import io.github.dlopezgarsco.plugins.configureRouting
+import io.github.dlopezgarsco.plugins.configureSecurity
+import io.github.dlopezgarsco.plugins.configureSerialization
+import io.ktor.application.*
 import io.ktor.server.netty.*
-import io.github.dlopezgarsco.plugins.*
 
-fun main() {
-  embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-    configureSecurity()
-    configureRouting()
-    configureHTTP()
-    configureSerialization()
-  }.start(wait = true)
+fun main(args: Array<String>): Unit = EngineMain.main(args)
+
+fun Application.main() {
+  configureSecurity()
+  configureRouting()
+  configureHTTP()
+  configureSerialization()
 }
