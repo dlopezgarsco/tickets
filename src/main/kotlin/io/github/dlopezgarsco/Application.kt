@@ -1,9 +1,6 @@
 package io.github.dlopezgarsco
 
-import io.github.dlopezgarsco.plugins.configureHTTP
-import io.github.dlopezgarsco.plugins.configureRouting
-import io.github.dlopezgarsco.plugins.configureSecurity
-import io.github.dlopezgarsco.plugins.configureSerialization
+import io.github.dlopezgarsco.plugins.*
 import io.ktor.application.*
 import io.ktor.server.netty.*
 
@@ -14,4 +11,5 @@ fun Application.main() {
   configureRouting()
   configureHTTP()
   configureSerialization()
+  configureMonitoring()
 }
