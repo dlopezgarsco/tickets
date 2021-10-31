@@ -12,4 +12,5 @@ fun Application.main() {
   configureHTTP()
   configureSerialization()
   configureMonitoring()
+  configureDatabase()
 }
