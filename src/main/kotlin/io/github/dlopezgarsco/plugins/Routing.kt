@@ -10,10 +10,7 @@ fun Application.configureRouting() {
   install(Locations)
 
   routing {
-    get("/") {
-      call.respondText("Hello World!")
-    }
-
     tickets()
+    login()
   }
 }
