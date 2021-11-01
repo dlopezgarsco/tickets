@@ -1,4 +1,4 @@
-package io.github.dlopezgarsco.services
+package io.github.dlopezgarsco.utils
 
 interface PasswordService {
   fun hash (password: String)

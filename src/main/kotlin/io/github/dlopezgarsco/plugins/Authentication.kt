@@ -1,6 +1,7 @@
 package io.github.dlopezgarsco.plugins
 
 import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -49,22 +50,21 @@ class JWTService private constructor(
     }
   }
 
-  fun generateToken(user: String): String = JWT.create()
+  fun generateToken(user: String): String = build {
+    withClaim("User", user)
+  }
+
+  fun generateAnonymousToken(claims: Map<String, String>): String = build {
+    withClaim("Host", claims["Host"])
+    withClaim("User-Agent", claims["User-Agent"])
+  }
+
+  private fun build(builder: JWTCreator.Builder.() -> JWTCreator.Builder): String = JWT.create()
     .withAudience(audience)
     .withSubject("Authentication")
-    .withClaim("User", user)
     .withIssuer(issuer)
-    .withExpiresAt(obtainExpirationDate())
+    .withExpiresAt(Date(System.currentTimeMillis() + validity))
+    .builder()
     .sign(Algorithm.HMAC256(secret))
 
-  fun generateAnonymousToken(claims: Map<String, String>): String = JWT.create()
-    .withAudience(audience)
-    .withSubject("Authentication")
-    .withClaim("Host", claims["Host"])
-    .withClaim("User-Agent", claims["User-Agent"])
-    .withIssuer(issuer)
-    .withExpiresAt(obtainExpirationDate())
-    .sign(Algorithm.HMAC256(secret))
-
-  private fun obtainExpirationDate() = Date(System.currentTimeMillis() + validity)
 }

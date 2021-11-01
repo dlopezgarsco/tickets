@@ -1,9 +1,9 @@
 package io.github.dlopezgarsco.plugins
 
-import io.github.dlopezgarsco.api.v1.*
+import io.github.dlopezgarsco.api.v1.tickets
+import io.github.dlopezgarsco.api.v1.users.users
 import io.ktor.application.*
 import io.ktor.locations.*
-import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Application.configureRouting() {
@@ -11,6 +11,6 @@ fun Application.configureRouting() {
 
   routing {
     tickets()
-    login()
+    users()
   }
 }
