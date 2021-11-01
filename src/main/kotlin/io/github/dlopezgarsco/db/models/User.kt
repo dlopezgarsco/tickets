@@ -1,5 +1,7 @@
 package io.github.dlopezgarsco.db.models
 
+import arrow.core.Option
+import arrow.core.toOption
 import org.jetbrains.exposed.sql.Table
 import io.github.dlopezgarsco.plugins.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
@@ -16,22 +18,28 @@ object Users : Table() {
 data class User(
   val id: Int,
   val user: String,
-  val password: String
+  val password: String,
 )
 
 object UserDAO : DAO<User> {
 
-  override suspend fun get(id: Int): User? = dbQuery {
+  override suspend fun get(id: Int): Option<User> = dbQuery {
     Users.select { (Users.id eq id) }
       .mapNotNull { toPOJO(it) }
       .singleOrNull()
-  }
+  }.toOption()
+
+  suspend fun getByUser(user: String): Option<User> = dbQuery {
+    Users.select { (Users.user eq user) }
+      .mapNotNull { toPOJO(it) }
+      .singleOrNull()
+  }.toOption()
 
   override suspend fun getAll(): List<User> = dbQuery {
     Users.selectAll().map { toPOJO(it) }
   }
 
-  override suspend fun update(new: User): User? {
+  override suspend fun update(new: User): Option<User> {
     TODO("Not yet implemented")
   }
 
