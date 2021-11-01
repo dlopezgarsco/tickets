@@ -1,10 +1,13 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val arrow_version: String by project
+
 
 plugins {
     application
     kotlin("jvm") version "1.5.31"
+    kotlin("kapt") version "1.5.31"
 }
 
 group = "io.github.dlopezgarsco"
@@ -15,9 +18,14 @@ application {
 
 repositories {
     mavenCentral()
+    maven ("https://dl.bintray.com/arrow-kt/arrow-kt/")
 }
 
 dependencies {
+    implementation("io.arrow-kt:arrow-core:$arrow_version")
+    implementation("io.arrow-kt:arrow-syntax:$arrow_version")
+    kapt("io.arrow-kt:arrow-meta:$arrow_version")
+
     implementation("io.ktor:ktor-auth:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
