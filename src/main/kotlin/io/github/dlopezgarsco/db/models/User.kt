@@ -1,12 +1,10 @@
 package io.github.dlopezgarsco.db.models
 
+import arrow.core.Either
 import arrow.core.Option
 import arrow.core.toOption
-import org.jetbrains.exposed.sql.Table
 import io.github.dlopezgarsco.plugins.DatabaseFactory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 object Users : Table() {
   val id = integer("id").autoIncrement()
@@ -16,7 +14,7 @@ object Users : Table() {
 }
 
 data class User(
-  val id: Int,
+  val id: Int = 0,
   val user: String,
   val password: String,
 )
@@ -37,6 +35,17 @@ object UserDAO : DAO<User> {
 
   override suspend fun getAll(): List<User> = dbQuery {
     Users.selectAll().map { toPOJO(it) }
+  }
+
+  override suspend fun create(new: User): Either<DAOError, Int> {
+    if (getByUser(new.user).isNotEmpty())
+      return Either.Left(DAOError.RecordAlreadyExists)
+    return Either.Right(dbQuery {
+      Users.insert {
+        it[user] = new.user
+        it[password] = new.password
+      }
+    } get Users.id)
   }
 
   override suspend fun update(new: User): Option<User> {
