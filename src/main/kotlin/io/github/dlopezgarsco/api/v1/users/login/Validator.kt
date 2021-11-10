@@ -24,7 +24,7 @@ suspend fun UserPayload.validate(): Either<LoginError, UserPayload> = either {
 
 private fun UserPayload.input(): Either<LoginError, UserPayload> = when {
   user.isEmpty() || password.isEmpty() -> Left(LoginError.EmptyInput)
-  !Validator.verify(user, ValidationType.EMAIL) -> Left(LoginError.InvalidUser)
+  !(Validator.verify(user, ValidationType.EMAIL)) -> Left(LoginError.InvalidUser)
   else -> Right(this)
 }
 
